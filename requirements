@@ -1,0 +1,7 @@
+openmeteo_requests
+requests_cache
+numpy
+pandas
+retry_requests
+
+darts
