@@ -4,5 +4,4 @@ numpy
 pandas
 retry_requests
 streamlit
-darts
 streamlit-folium
