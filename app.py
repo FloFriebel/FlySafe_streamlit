@@ -14,9 +14,6 @@ city_couples = {
     "Bolzano": "Innsbruck"
 }
 
-
-
-
 #st.cache_data
 def get_city_data(end_date):
     start_date = end_date - timedelta(days= 20)
@@ -39,15 +36,15 @@ def calculate_difference(value1, value2):
 # Function to determine the risk level based on the difference
 def determine_risk_level(difference):
     if abs(sum(difference) / 3) < 4:
-        st.success("It looks safe up there! :parachute: ")
+        st.success(" :parachute: It looks safe up there!")
     elif abs(sum(difference) / 3) > 4 and abs(sum(difference) / 3) < 15:
-        st.warning("Be careful, Föhn risk! :tornado: ")
+        st.warning(" :tornado: Be careful, Föhn risk!")
     elif abs(sum(difference) / 3) > 15:
-        st.error("Don't fly! :skull_and_crossbones: ")
+        st.error(" :skull_and_crossbones: Don't fly!")
 
 # Streamlit app
 def main():
-    st.title("Föhn Warning :parachute: ")
+    st.title(" :parachute: Föhn Warning")
     st.image('banner.png')
     st.markdown("""
     #### Live forecast for paragliding pilots
@@ -61,7 +58,7 @@ def main():
         # Get the couple city
         couple_city = city_couples[selected_city]
 
-        st.write(f"You selected **{selected_city}** and its twin :two_men_holding_hands: city **{couple_city}**")
+        st.write(f" :two_men_holding_hands: You selected **{selected_city}** and its twin city **{couple_city}**")
         selected_date = datetime.today()
 
         st.write("Retrieving data...")
@@ -88,8 +85,6 @@ def main():
         else:
             st.write("Failed to fetch data from the API. Please try again later.")
 
-        # Creating dataframe for the table
-        #df = pd.DataFrame([city1_data_rounded, city2_data_rounded, difference_rounded], index = [selected_city, couple_city, 'Difference'], columns = ['+1 hour', '+2 hours', '+3 hours']).T
         # Get current hour
         current_hour = datetime.now().strftime('%H')
         current_hour = int(current_hour)
@@ -98,28 +93,12 @@ def main():
         df = pd.DataFrame([city1_data_rounded_hPa, city2_data_rounded_hPa, difference_rounded_hPa],
                           index=[selected_city, couple_city, 'Pressure Difference'], columns=column_names).T
 
+        st.write('*"Ensuring thorough meteorological checks is essential for achieving safe and joyful landings."*  \n :face_with_monocle: Dr. Zephyr Skywatcher')
 
-
-        st.write('*"Ensuring thorough meteorological checks is essential for achieving safe and joyful landings."* :face_with_monocle: Dr. Zephyr Skywatcher')
         st.write(df)
+        #m = folium.Map(location=[47.05, 10], zoom_start=6.8, tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', attr='Tiles &copy; Esri &mdash; Source: US National Park Service')
 
-
-        #
-        # # Create a Folium map centered around a specific location
-        # m = folium.Map(location=[47.05, 9.5], zoom_start=7)
-
-        # # # Add markers for each city
-        # city_coordinates = {
-        #     "Zurich": (47.3769, 8.5417),
-        #     "Lugano": (46.0052, 8.9535),
-        #     "Innsbruck": (47.2692, 11.4041),
-        #     "Bolzano": (46.4983, 11.3548)
-        # }
-        # for city, coordinates in city_coordinates.items():
-        #     folium.Marker(location=coordinates, popup=city).add_to(m)
-
-
-        m = folium.Map(location=[47.05, 10], zoom_start=6.8, tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', attr='Tiles &copy; Esri &mdash; Source: US National Park Service')
+        m = folium.Map(location=[47.05, 10], zoom_start=6.8, tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', attr='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community')
         marker_cluster = MarkerCluster().add_to(m)
 
 
