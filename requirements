@@ -3,5 +3,6 @@ requests_cache
 numpy
 pandas
 retry_requests
-
+streamlit
 darts
+folium
