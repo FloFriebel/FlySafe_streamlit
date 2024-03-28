@@ -5,4 +5,4 @@ pandas
 retry_requests
 streamlit
 darts
-folium
+streamlit-folium
