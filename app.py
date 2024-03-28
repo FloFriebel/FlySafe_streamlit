@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
-import folium
+#import folium
 #from streamlit_folium import folium_static
 
 city_couples = {
