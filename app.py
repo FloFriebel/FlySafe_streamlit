@@ -2,8 +2,8 @@ import streamlit as st
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
-#import folium
-#from streamlit_folium import folium_static
+import folium
+from streamlit_folium import folium_static
 
 city_couples = {
     "--": "--",
@@ -101,23 +101,23 @@ def main():
         st.write('*"Ensuring thorough meteorological checks is essential for achieving safe and joyful landings."* :face_with_monocle: Dr. Zephyr Skywatcher')
         st.write(df)
 
-        # st.title("City Map")
-        #     # Create a Folium map centered around a specific location
+        st.title("City Map")
+        #
         # # Create a Folium map centered around a specific location
-        # m = folium.Map(location=[47.05, 9.5], zoom_start=7)
+        m = folium.Map(location=[47.05, 9.5], zoom_start=7)
 
         # # Add markers for each city
-        # city_coordinates = {
-        #     "Zurich": (47.3769, 8.5417),
-        #     "Lugano": (46.0052, 8.9535),
-        #     "Innsbruck": (47.2692, 11.4041),
-        #     "Bolzano": (46.4983, 11.3548)
-        # }
-        # for city, coordinates in city_coordinates.items():
-        #     folium.Marker(location=coordinates, popup=city).add_to(m)
+        city_coordinates = {
+            "Zurich": (47.3769, 8.5417),
+            "Lugano": (46.0052, 8.9535),
+            "Innsbruck": (47.2692, 11.4041),
+            "Bolzano": (46.4983, 11.3548)
+        }
+        for city, coordinates in city_coordinates.items():
+            folium.Marker(location=coordinates, popup=city).add_to(m)
 
-        # # Display the map using Streamlit
-        # folium_static(m)
+        # Display the map using Streamlit
+        folium_static(m)
 
 
 
