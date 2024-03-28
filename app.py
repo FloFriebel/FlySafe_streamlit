@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
+import folium
+#from streamlit_folium import folium_static
 
 city_couples = {
     "--": "--",
@@ -10,6 +12,8 @@ city_couples = {
     "Innsbruck": "Bolzano",
     "Bolzano": "Innsbruck"
 }
+
+
 
 
 #st.cache_data
@@ -47,7 +51,7 @@ def main():
     #### Live forecast for paragliding pilots
 
     This tool provides a real-time forecast for the next 3 hours. All values are expressed in hectopascals (hPa).
-    The threshold for safe flight is set to ±4 hPa, aligning with the criteria for the Föhn phenomenon.
+    The threshold interval for safe flight is set to ±4 hPa, aligning with the criteria for the Föhn phenomenon.
     """)
 
     selected_city = st.selectbox("Select a city:", list(city_couples.keys()))
@@ -71,19 +75,50 @@ def main():
 
             city1_data_rounded = [round(num, 2) for num in city1_data]
             city2_data_rounded = [round(num, 2) for num in city2_data]
-
+            city1_data_rounded_hPa = [f'{pressure} hPa' for pressure in city1_data_rounded]
+            city2_data_rounded_hPa = [f'{pressure} hPa' for pressure in city2_data_rounded]
             difference = calculate_difference(city1_data, city2_data)
 
             difference_rounded = [round(num, 2) for num in difference]
+            difference_rounded_hPa = [f'{difference} hPa' for difference in difference_rounded]
             # showing the warning first
             determine_risk_level(difference)
         else:
             st.write("Failed to fetch data from the API. Please try again later.")
 
         # Creating dataframe for the table
-        df = pd.DataFrame([city1_data_rounded, city2_data_rounded, difference_rounded], index = [selected_city, couple_city, 'Difference'], columns = ['+1 hour', '+2 hours', '+3 hours']).T
+        #df = pd.DataFrame([city1_data_rounded, city2_data_rounded, difference_rounded], index = [selected_city, couple_city, 'Difference'], columns = ['+1 hour', '+2 hours', '+3 hours']).T
+        # Get current hour
+        current_hour = datetime.now().strftime('%H')
+        current_hour = int(current_hour)
+        column_names = [f'{(current_hour + i) % 24}:00' for i in range(1, 4)]
+
+        df = pd.DataFrame([city1_data_rounded_hPa, city2_data_rounded_hPa, difference_rounded_hPa],
+                          index=[selected_city, couple_city, 'Pressure Difference'], columns=column_names).T
+
+
+
         st.write('*"Ensuring thorough meteorological checks is essential for achieving safe and joyful landings."* :face_with_monocle: Dr. Zephyr Skywatcher')
         st.write(df)
+
+        # st.title("City Map")
+        #     # Create a Folium map centered around a specific location
+        # # Create a Folium map centered around a specific location
+        # m = folium.Map(location=[47.05, 9.5], zoom_start=7)
+
+        # # Add markers for each city
+        # city_coordinates = {
+        #     "Zurich": (47.3769, 8.5417),
+        #     "Lugano": (46.0052, 8.9535),
+        #     "Innsbruck": (47.2692, 11.4041),
+        #     "Bolzano": (46.4983, 11.3548)
+        # }
+        # for city, coordinates in city_coordinates.items():
+        #     folium.Marker(location=coordinates, popup=city).add_to(m)
+
+        # # Display the map using Streamlit
+        # folium_static(m)
+
 
 
 main()
