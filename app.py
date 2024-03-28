@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import folium
 from streamlit_folium import folium_static
+from folium.plugins import MarkerCluster
 
 city_couples = {
     "--": "--",
@@ -47,6 +48,7 @@ def determine_risk_level(difference):
 # Streamlit app
 def main():
     st.title("Föhn Warning :parachute: ")
+    st.image('banner.png')
     st.markdown("""
     #### Live forecast for paragliding pilots
 
@@ -101,22 +103,51 @@ def main():
         st.write('*"Ensuring thorough meteorological checks is essential for achieving safe and joyful landings."* :face_with_monocle: Dr. Zephyr Skywatcher')
         st.write(df)
 
-        st.title("City Map")
+
         #
         # # Create a Folium map centered around a specific location
-        m = folium.Map(location=[47.05, 9.5], zoom_start=7)
+        # m = folium.Map(location=[47.05, 9.5], zoom_start=7)
 
-        # # Add markers for each city
-        city_coordinates = {
-            "Zurich": (47.3769, 8.5417),
-            "Lugano": (46.0052, 8.9535),
-            "Innsbruck": (47.2692, 11.4041),
-            "Bolzano": (46.4983, 11.3548)
-        }
-        for city, coordinates in city_coordinates.items():
-            folium.Marker(location=coordinates, popup=city).add_to(m)
+        # # # Add markers for each city
+        # city_coordinates = {
+        #     "Zurich": (47.3769, 8.5417),
+        #     "Lugano": (46.0052, 8.9535),
+        #     "Innsbruck": (47.2692, 11.4041),
+        #     "Bolzano": (46.4983, 11.3548)
+        # }
+        # for city, coordinates in city_coordinates.items():
+        #     folium.Marker(location=coordinates, popup=city).add_to(m)
 
-        # Display the map using Streamlit
+
+        m = folium.Map(location=[47.05, 10], zoom_start=6.8, tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', attr='Tiles &copy; Esri &mdash; Source: US National Park Service')
+        marker_cluster = MarkerCluster().add_to(m)
+
+
+        folium.Marker(
+            location=[47.3769, 8.5417],
+            tooltip= "Zurich",
+            icon=folium.Icon(color='red', icon='parachute-box', prefix='fa'),
+        ).add_to(marker_cluster)
+
+        folium.Marker(
+            location=[46.0052, 8.9535],
+            tooltip= "Lugano",
+            icon=folium.Icon(color="lightred", icon="parachute-box", prefix='fa'),
+        ).add_to(marker_cluster)
+
+        folium.Marker(
+            location=[47.2692, 11.4041],
+            tooltip= "Innsbruck",
+            icon=folium.Icon(color="darkpurple", icon="parachute-box", prefix='fa'),
+        ).add_to(marker_cluster)
+
+        folium.Marker(
+            location=[46.4983, 11.3548],
+            tooltip= "Bolzano",
+            icon=folium.Icon(color="pink", icon="parachute-box", prefix='fa'),
+        ).add_to(marker_cluster)
+
+
         folium_static(m)
 
 
