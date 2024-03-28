@@ -5,3 +5,4 @@ pandas
 retry_requests
 streamlit
 streamlit-folium
+pytz
