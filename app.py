@@ -5,7 +5,7 @@ import pandas as pd
 import folium
 from streamlit_folium import folium_static
 from folium.plugins import MarkerCluster
-
+import pytz
 city_couples = {
     "--": "--",
     "Zurich": "Lugano",
@@ -49,8 +49,7 @@ def main():
     st.markdown("""
     #### Live forecast for paragliding pilots
 
-    This tool provides a real-time forecast for the next 3 hours. All values are expressed in hectopascals (hPa).
-    The threshold interval for safe flight is set to ±4 hPa, aligning with the criteria for the Föhn phenomenon.
+    This tool provides a real-time forecast for the next 3 hours.  \n  The threshold interval for safe flight is set to ±4 hPa, aligning with the criteria for the Föhn phenomenon.
     """)
 
     selected_city = st.selectbox("Select a city:", list(city_couples.keys()))
@@ -86,7 +85,15 @@ def main():
             st.write("Failed to fetch data from the API. Please try again later.")
 
         # Get current hour
-        current_hour = datetime.now().strftime('%H')
+       # Get the current time in the Zurich timezone
+                # Define the Zurich timezone
+        zurich_timezone = pytz.timezone('Europe/Zurich')
+
+        # Get the current time in the Zurich timezone
+        current_time = datetime.now(zurich_timezone)
+
+        # Extract the current hour
+        current_hour = current_time.strftime('%H')
         current_hour = int(current_hour)
         column_names = [f'{(current_hour + i) % 24}:00' for i in range(1, 4)]
 
