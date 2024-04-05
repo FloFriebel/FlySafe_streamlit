@@ -41,13 +41,14 @@ def determine_risk_level(difference):
         st.warning(" :tornado: Be careful, Föhn risk!")
     elif abs(sum(difference) / 3) > 15:
         st.error(" :skull_and_crossbones: Don't fly!")
+#Live forecast for paragliding pilots
 
 # Streamlit app
 def main():
-    st.title(" :parachute: Föhn Warning")
+    st.title(" :parachute: FlySafe")
     st.image('banner.png')
     st.markdown("""
-    #### Live forecast for paragliding pilots
+    #### Föhn Prediction for Paragliders
 
     This tool provides a real-time forecast for the next 3 hours.  \n  The threshold interval for safe flight is set to ±4 hPa, aligning with the criteria for the Föhn phenomenon.
     """)
